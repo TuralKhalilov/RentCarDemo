@@ -24,11 +24,7 @@ namespace WebAPI.Controllers
         public IActionResult GetAll()
         {
             var result =_carService.GetAll();
-            if (result.Count>1)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
+            return Ok(result.Data);
            
         }
     }

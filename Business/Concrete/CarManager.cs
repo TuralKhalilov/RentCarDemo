@@ -1,4 +1,7 @@
 ﻿using Business.Abstrack;
+using Business.Constants;
+using Core.Utulities;
+using Core.Utulities.Results;
 using DataAccess.Abstrack;
 using Entities.Concrete;
 using System;
@@ -18,14 +21,36 @@ namespace Business.Concrete
             _carDal = carDal;
         }
 
-        public void Add(Car car)
+        public IResult Add(Car car)
         {
-            _carDal.Add(car);
+              _carDal.Add(car);
+
+            return new SuccessResult(Messages.SuccessAdded);
         }
 
-        public List<Car> GetAll()
+        public IResult Delete(Car car)
         {
-            return _carDal.GetAll();
+            throw new NotImplementedException();
+        }
+
+        public IDataResult< List<Car>> GetAll()
+        {
+            var resut = _carDal.GetAll();
+            if (resut==null)
+            {
+                return new ErorDataResult<List<Car>>(resut);
+            }
+            return new SuccessDataResult<List<Car>>(resut);
+        }
+
+        public IDataResult<Car> GetById()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IResult Update(Car car)
+        {
+            throw new NotImplementedException();
         }
     }
 }
