@@ -1,5 +1,6 @@
 ﻿
 using Business.Abstrack;
+using Entities.Concrete;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -26,6 +27,17 @@ namespace WebAPI.Controllers
             var result =_carService.GetAll();
             return Ok(result.Data);
            
+        }
+
+        [HttpPost("add")]
+        public IActionResult Add(Car car)
+        {
+            var result = _carService.Add(car);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
     }
 }

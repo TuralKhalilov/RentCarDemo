@@ -1,14 +1,13 @@
-﻿using Autofac;
+﻿
+
+using Autofac;
+using Autofac.Extras.DynamicProxy;
 using Business.Abstrack;
 using Business.Concrete;
 using Castle.DynamicProxy;
+using Core.Utulities.Interceptors;
 using DataAccess.Abstrack;
 using DataAccess.Concrete.EntityFramework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.DependencyResolver
 {
@@ -20,8 +19,14 @@ namespace Business.DependencyResolver
             builder.RegisterType<EfCarDal>().As<ICarDal>().SingleInstance();
 
 
+            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 
-            
+            builder.RegisterAssemblyTypes(assembly).AsImplementedInterfaces()
+                .EnableInterfaceInterceptors(new ProxyGenerationOptions()
+                {
+                    Selector = new AspectInterceptorSelector()
+                }).SingleInstance();
+
         }
     }
 }

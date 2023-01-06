@@ -7,8 +7,8 @@ namespace ConsoleUI
 {
     class Program
     {
-        //static void Main(string[] args)
-        //{
+        static void Main(string[] args)
+        {
         //    CarManager carManager = new CarManager(new EfCarDal());
         //    //carManager.Add(new Car { Description = "salam", ColorId = 2,  DailyPrice = 34, BrandId = 2, ModelYear = new DateTime(2023, 3, 4) });
         //   var result= carManager.GetAll();
@@ -16,7 +16,7 @@ namespace ConsoleUI
         //    {
         //        Console.WriteLine(car.Description);
         //    }
-        //}
+        }
     }
 }
                    
