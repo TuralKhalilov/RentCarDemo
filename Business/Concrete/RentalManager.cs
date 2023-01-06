@@ -21,15 +21,25 @@ namespace Business.Concrete
 
         public IResult AddRent(Rental rental)
         {
+            var result = _rentalDal.GetAll(x => x.CarId == rental.CarId).Count();
+            if (result < 1)
+            {
+                _rentalDal.Add(new Rental { CarId = rental.CarId, CustomerId = 1, RentDate = new DateTime(2022, 12, 2), ReturnDate = new DateTime(2022, 12, 2) });
+            }
 
-            var nullresult = _rentalDal.GetAll(x => x.ReturnDate == null && x.CarId == rental.CarId).Any();
+
+
+            var nullresult = _rentalDal.GetAll(x => x.ReturnDate == new DateTime(0001,01,01) && x.CarId == rental.CarId).Any();
 
             if (nullresult)
             {
-                _rentalDal.Add(rental);
-                return new SuccessResult();
+                return new ErorResult();
+
             }
-            return new ErorResult();
+            
+            _rentalDal.Add(rental);
+            return new SuccessResult();
+
 
         }
 
@@ -40,7 +50,7 @@ namespace Business.Concrete
 
         public IDataResult<List<Rental>> GetAll()
         {
-           return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll());
+            return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll());
         }
 
         public IDataResult<Rental> GetById(int id)
@@ -56,7 +66,7 @@ namespace Business.Concrete
         //private IResult CheckAddRental(Rental rental)
         //{
         //    var nullresult = _rentalDal.GetAll(x => x.ReturnDate == null && x.CarId == rental.CarId).Any();
-           
+
         //    if (nullresult)
         //    {
         //        _rentalDal.Add(rental);
