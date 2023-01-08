@@ -1,4 +1,5 @@
 ﻿using Business.Abstrack;
+using Core.Utulities.Business;
 using Core.Utulities.Results;
 using DataAccess.Abstrack;
 using Entities.Concrete;
@@ -21,20 +22,11 @@ namespace Business.Concrete
 
         public IResult AddRent(Rental rental)
         {
-            var result = _rentalDal.GetAll(x => x.CarId == rental.CarId).Count();
-            if (result < 1)
+            var result = BusinessRules.Run( CheckAddRental(rental));
+
+            if (result!=null)
             {
-                _rentalDal.Add(new Rental { CarId = rental.CarId, CustomerId = 1, RentDate = new DateTime(2022, 12, 2), ReturnDate = new DateTime(2022, 12, 2) });
-            }
-
-
-
-            var nullresult = _rentalDal.GetAll(x => x.ReturnDate == new DateTime(0001,01,01) && x.CarId == rental.CarId).Any();
-
-            if (nullresult)
-            {
-                return new ErorResult();
-
+                return result;
             }
             
             _rentalDal.Add(rental);
@@ -45,7 +37,8 @@ namespace Business.Concrete
 
         public IResult Delete(Rental rental)
         {
-            throw new NotImplementedException();
+            _rentalDal.Delete(rental);
+            return new SuccessResult();
         }
 
         public IDataResult<List<Rental>> GetAll()
@@ -55,25 +48,40 @@ namespace Business.Concrete
 
         public IDataResult<Rental> GetById(int id)
         {
-            throw new NotImplementedException();
+            return new SuccessDataResult<Rental>(_rentalDal.Get(p => p.Id == id));
         }
 
-        public IResult ReturnRent(int id, DateTime returnTime)
+        public IResult ReturnRent(Rental rental)
         {
-            throw new NotImplementedException();
+             _rentalDal.Update(new Rental { Id = rental.Id, ReturnDate = rental.ReturnDate });
+            return new SuccessResult();
         }
 
-        //private IResult CheckAddRental(Rental rental)
-        //{
-        //    var nullresult = _rentalDal.GetAll(x => x.ReturnDate == null && x.CarId == rental.CarId).Any();
+        private IResult CheckAddRental(Rental rental)
+        {
+            var initResult = _rentalDal.GetAll(x => x.CarId == rental.CarId).Count();
+            if (initResult < 1)
+            {
+                
+                return new SuccessResult();
+            }
 
-        //    if (nullresult)
-        //    {
-        //        _rentalDal.Add(rental);
-        //        return new SuccessResult();
-        //    }
-        //    return new ErorResult(); 
+            var nullresult = _rentalDal.GetAll(x => x.ReturnDate == new DateTime(0001, 01, 01) && x.CarId == rental.CarId).Any();
 
-        //}
+            if (nullresult)
+            {
+                return new ErorResult();
+
+            }
+
+           
+            return new SuccessResult();
+        }
+
+
+       
+       
     }
+
+
 }
