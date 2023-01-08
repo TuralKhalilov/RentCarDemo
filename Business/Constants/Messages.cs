@@ -10,7 +10,7 @@ namespace Business.Constants
     {
         public static string SuccessAdded = "Added Successful";
         public static string ErorAdded = "Added Failed";
-      
 
+        public static string ImageAdded = "Image Added";
     }
 }

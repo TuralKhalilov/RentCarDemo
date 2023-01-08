@@ -11,7 +11,7 @@ namespace Business.Abstrack
 {
   public  interface ICarImageService
     {
-        IResult Add(IFormFile file, string root);
+        IResult Add(IFormFile file, CarImage carImage);
         IResult Delete(CarImage carImage);
         IResult Update(IFormFile file, CarImage carImage);
 
